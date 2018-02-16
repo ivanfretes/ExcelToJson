@@ -49,17 +49,32 @@ public class ExcelToJsonXLSX {
 	protected int columnIndexInit = 0;
 	
 
+	// Cell content type
+	protected String[] cellType = {"BLANK","NUMBER","STRING"};
+	
 	public ExcelToJsonXLSX(String fExcelName) throws InvalidFormatException, FileNotFoundException {
 		this.initialize(fExcelName);
 	}
 	
 	
+	// Setting the path or file name of 
+	public void setFileExcelName(String fExcelName) {
+		try {
+			if (fExcelName.toLowerCase().indexOf(this.fileExcelFormat) < 0) {
+				throw new Exception("Problem the extension file, This library support a .xlxs format file");
+			}
+			this.fileExcelName = fExcelName;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
 	public ExcelToJsonXLSX() {}
 	
-	public void initialize(String fExcelName) throws InvalidFormatException, FileNotFoundException {
-		this.fileExcelName = fExcelName; 
+	public void initialize(String fExcelName) throws InvalidFormatException, FileNotFoundException { 
+		this.setFileExcelName(fExcelName);
 		this.openFile();
-		this.createFileJSON("/home/ivan/Documents/PPQ/Datos/xlsx.json"); // (improve)
+		this.createFileJSON("/home/ivan/Documents/PPQ/Datos/test.xlsx"); // (improve)
 	}
 	
 	public void setCellIgnorate(String[] cellValues) {
@@ -74,13 +89,21 @@ public class ExcelToJsonXLSX {
 		Sheet sheetTmp = this.wb.getSheetAt(sheetIndex);
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		JsonParser jp = new JsonParser();
-		JsonElement je = jp.parse(this.getAllRowBySheet(sheetTmp).toString());
+		JsonElement je = jp.parse(this.getAllRowBySheet(sheetTmp).toJSONString());
 		System.out.println(gson.toJson(je));
 		
 		
 		// hacer put en el JSON
-
+		//System.out.print(sheetTmp.getLastRowNum());
+		
+		//System.out.print("contenido de Prueba");
+		//System.out.print(sheetTmp.getRow(sheetTmp.getLastRowNum()).getCell(0));
+		//System.out.print("contenido de Prueba end");
+		//String s = "";
+		//System.out.println(s.indexOf("holamundo"));
 	}
+	
+	
 	
 	/**
 	 * Return the number of the cant sheet
@@ -158,9 +181,10 @@ public class ExcelToJsonXLSX {
 	 */
 	private JSONObject getAllCellByRow(Row row, int cellIndex) {
 		JSONObject jsonObject = new JSONObject();
+
 		for (Cell cell : row) {
 			if (verifycolumnIndexInit(cellIndex)) {
-				if (!this.verifyCellDataEqual(cell)) {
+				if (!this.verifyCellDataEqual(cell) && cellIndex < this.KeyJsonName.length) {
 					jsonObject.put(this.KeyJsonName[cellIndex], cell.toString().replaceAll("  ","").trim());
 				}
 			}
@@ -168,6 +192,8 @@ public class ExcelToJsonXLSX {
 		}
 		return jsonObject;
 	}
+	
+	
 	
 	
 	/**
@@ -178,8 +204,9 @@ public class ExcelToJsonXLSX {
 	private boolean verifyCellDataEqual(Cell cell) {
 		if (null != this.cellIgnorate) {
 			for (String cellIgn : this.cellIgnorate) {
-				if (cell.toString().toLowerCase().trim().indexOf(cellIgn.toLowerCase()) > -1)
+				if (cell.toString().trim().toLowerCase().indexOf(cellIgn.toLowerCase()) > -1) {
 					return true;
+				}
 			}
 		}
 		return false;

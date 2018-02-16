@@ -7,16 +7,16 @@ public class App {
 	ExcelToJsonXLSX xlsxParseJson;
 	
 	public App() throws InvalidFormatException, FileNotFoundException{
-		xlsxParseJson = new ExcelToJsonXLSX("/home/ivan/Documents/PPQ/Datos/test.xlsx");
-		xlsxParseJson.setInitGrid(0, 0);
+		xlsxParseJson = new ExcelToJsonXLSX("/home/ivan/Documents/PPQ/Datos/test-ppq.xlsx");
+		xlsxParseJson.setInitGrid(2, 0);
 		
-		//String[] ignorate = {"DPTO.","locales de","Electores","Mesas","Telefono", "totales", "zona"};
-		//xlsxParseJson.setCellIgnorate(ignorate);
+		String[] ignorate = {"dpto.","locales","elect","mesas","telefono", "totales", "zona", "distrito", "condicion"};
+		xlsxParseJson.setCellIgnorate(ignorate);
 		
-		String[] keyJSONname = {"province", "name", "elector_cant", "table_cant", "phone"};
+		String[] keyJSONname = {"province" ,"zone" , "name", "elector_cant", "table_cant"};
 		xlsxParseJson.setKeyJsonName(keyJSONname);
 		
-		xlsxParseJson.getSheet(0);
+		xlsxParseJson.getSheet(9);
 	
 	}
 	
