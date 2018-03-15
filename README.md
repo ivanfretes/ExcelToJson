@@ -1,28 +1,29 @@
-*ExcelToJson - Parsing the Excel(XLSX) file to JSON format*
+#ExcelToJson - Parsing the Excel(XLSX) file to JSON format#
 
-***Implement***
+##Implement##
 
 ```
-
-	public App() throws InvalidFormatException, FileNotFoundException{
-		xlsxParseJson = new ExcelToJsonXLSX("~./file.xlsx");
+	// i.e
+	public TestApp() throws InvalidFormatException, IOException{
+		xlsxParseJson = new ExcelToJsonXLSX("~/document.xlsx");
 		xlsxParseJson.setInitGrid(0, 0);
 		
 		// cells ignorates
-		String[] ignorate = {"coinciden1","coinciden2"};
+		String[] ignorate = {"dpto.","locales","elect","mesas","telefono", "totales", "zona", "distrito", "condicion"};
 		xlsxParseJson.setCellIgnorate(ignorate);
 		
 		// New keys for the JSON Object
-		String[] keyJSONname = {"keyName1","keyName2" , "keyName3"};
+		String[] keyJSONname = {"province" ,"zone" , "name", "elector_cant", "table_cant","phone"};
 		xlsxParseJson.setKeyJsonName(keyJSONname);
 		
 
 		// get the sheet by one index
 		xlsxParseJson.getSheet(0);
-	
-		// get the all sheet 
-		// xlsxParseJson.getAllSheet();
-	
+		
+		// Setting the output file name 
+		xlsxParseJson.setFileJsonName("file-name.json");
+		xlsxParseJson.createFileJSON();
+
 	}
 
 ```
