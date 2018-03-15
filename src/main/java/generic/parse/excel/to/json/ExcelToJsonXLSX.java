@@ -43,7 +43,7 @@ public class ExcelToJsonXLSX {
     private File fileInput;
     private String fileExcelName; 
     private final String fileExcelFormat = "xlsx";
-    private String fileJsonName = null;
+    private String fileJsonName = "xlsx.json";
     private BufferedWriter fileOutput;
     
     // Cell content type
@@ -75,7 +75,7 @@ public class ExcelToJsonXLSX {
     	if (null != fJsonName)
     		fileJsonName = this.fileInput.getParent()+"/"+fJsonName;
     	else 
-    		fileJsonName = this.fileInput.getParent()+"/xlsx.json";
+    		fileJsonName = this.fileInput.getParent()+"/"+fileJsonName;
 
     }
 
@@ -86,6 +86,7 @@ public class ExcelToJsonXLSX {
     	this.sheetResults = new HashMap<String, ArrayList>();
         this.setFileExcelName(fExcelName);
         this.openFile();
+        this.setFileJsonName(null);
     }
 
     
@@ -106,6 +107,7 @@ public class ExcelToJsonXLSX {
         this.getAllRowBySheet(sheetTmp);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         this.JSONData = gson.toJson(this.sheetResults);
+        //this.sheetResults  = null;
     }
     
     
