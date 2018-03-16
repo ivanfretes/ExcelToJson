@@ -34,7 +34,8 @@ public class ExcelToJsonXLSX {
 
     // Cells that not inserted/ignorate in the result grid
     protected String[] cellIgnorate = null;
-
+    
+    
     // Range to column iterate 
     protected int rowIndexInit = 0;
     protected int columnIndexInit = 0;
@@ -215,9 +216,11 @@ public class ExcelToJsonXLSX {
      * @return boolean
      */
     private boolean verifyCellDataEqual(Cell cell) {
+    	String cellLowerCase;
         if (null != this.cellIgnorate) {
             for (String cellIgn : this.cellIgnorate) {
-                if (cell.toString().trim().toLowerCase().indexOf(cellIgn.toLowerCase()) > -1) {
+            	cellLowerCase = cell.toString().trim().toLowerCase();
+                if (cellLowerCase.indexOf(cellIgn.toLowerCase()) == 0) {
                     return true;
                 }
             }
