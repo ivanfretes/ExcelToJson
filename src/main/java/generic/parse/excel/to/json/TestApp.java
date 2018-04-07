@@ -28,7 +28,7 @@ public class TestApp {
 			xlsxParseJson.getSheet(7);
 			
 			// Setting name
-			xlsxParseJson.setFileJsonName("departament/11-central.json");
+			xlsxParseJson.setFileJsonName("departament/local-format.json");
 			
 			// Method to create json file
 			xlsxParseJson.createFileJSON();
