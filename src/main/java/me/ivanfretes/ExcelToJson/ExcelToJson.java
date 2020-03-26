@@ -39,6 +39,7 @@ public class ExcelToJson {
      * Range to column iterate  
      * Info and data of files (xlsx and json)
      * List type of CELLS
+     * Current File Path
      */
     protected String[] KeyJsonName = null;
     protected String[] cellIgnorate = null;
@@ -111,6 +112,19 @@ public class ExcelToJson {
 
     
     /**
+     * Verify the filepath
+     * @param cellValues
+     
+    public void setFilePath(String filePath){
+        if (this.fileExcelName.indexOf("./") == 0){
+            this.fileExcelName = this.fileExcelName.substring(0, 2);
+        }
+        String filePatch = System.getProperty("user.dir");
+        
+            
+    }*/
+
+    /**
      * Setting the cell to ignorates
      * @param cellValues
      */
@@ -154,9 +168,13 @@ public class ExcelToJson {
      * @throws IOException 
      */
     public void createFileJSON() throws IOException  {
-    	fileOutput = new BufferedWriter(new FileWriter(fileJsonName));
-    	fileOutput.write(this.JSONData);
-    	fileOutput.close();
+    	try {
+    		fileOutput = new BufferedWriter(new FileWriter(fileJsonName));
+        	fileOutput.write(this.JSONData);
+        	fileOutput.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
     }
 
    
