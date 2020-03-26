@@ -1,10 +1,11 @@
-package generic.parse.excel.to.json;
+package me.ivanfretes.ExcelToJson;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,42 +22,54 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+
 /**
  * @author Iván Fretes
+ * @email vanfretes@gmail.com
+ * @link www.ivanfretes.me
  */
-public class ExcelToJsonXLSX {
+public class ExcelToJson {
     private XSSFWorkbook wb;
     private String JSONData;
     private Map<String, ArrayList> sheetResults;
     
-    // Name of the column to export as key on the JSON file
+    /**
+     * Name of the column to export as key on the JSON file
+     * Cells that not inserted/ignorate in the result grid
+     * Range to column iterate  
+     * Info and data of files (xlsx and json)
+     * List type of CELLS
+     */
     protected String[] KeyJsonName = null;
-
-    // Cells that not inserted/ignorate in the result grid
     protected String[] cellIgnorate = null;
     
-    
-    // Range to column iterate 
     protected int rowIndexInit = 0;
     protected int columnIndexInit = 0;
-
-    // Info and data of files (xlsx and json)
+    
     private File fileInput;
     private String fileExcelName; 
     private final String fileExcelFormat = "xlsx";
     private String fileJsonName = "xlsx.json";
     private BufferedWriter fileOutput;
     
-    // Cell content type
     protected String[] cellType = {"BLANK","NUMBER","STRING"};
 	
-
-    public ExcelToJsonXLSX(String fExcelName) throws InvalidFormatException, IOException {
+    
+    /**
+     * Constructor with the file name
+     * @param fExcelName
+     * @throws InvalidFormatException
+     * @throws IOException
+     */
+    public ExcelToJson(String fExcelName) throws InvalidFormatException, IOException {
         this.initialize(fExcelName);
     }
+    
 
-
-    // Setting the path or file name of 
+    /**
+     * Setting the path or file name of 
+     * @param fExcelName
+     */
     public void setFileExcelName(String fExcelName) {
         try {
             if (fExcelName.toLowerCase().indexOf(this.fileExcelFormat) < 0) {
@@ -80,9 +93,15 @@ public class ExcelToJsonXLSX {
 
     }
 
-    public ExcelToJsonXLSX() {}
+    public ExcelToJson() {}
 
     // initialize the apps component
+    /**
+     * 
+     * @param fExcelName
+     * @throws InvalidFormatException
+     * @throws IOException
+     */
     public void initialize(String fExcelName) throws InvalidFormatException, IOException { 
     	this.sheetResults = new HashMap<String, ArrayList>();
         this.setFileExcelName(fExcelName);
@@ -101,46 +120,40 @@ public class ExcelToJsonXLSX {
 
     /**
      * Get the one sheet by index
-     * @param sheetIndex
+     * @param sheetIndex - The number or index of the Sheet
      */
     public void getSheet(int sheetIndex) {
         Sheet sheetTmp = this.wb.getSheetAt(sheetIndex);
         this.getAllRowBySheet(sheetTmp);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         this.JSONData = gson.toJson(this.sheetResults);
-        //this.sheetResults  = null;
     }
     
     
-    // Return the JSONData generate
-    public String getJsonData() {
+    /**
+     * Return the JSON as a String
+     * @return string
+     */
+    public String getJsonDataStr() {
     	return this.JSONData; 
     }
     
 
     /**
-     * Return the number of the cant sheet
+     * Return the cant of sheet
+     * 
      * @return int
      */
     public int getSheetNumber() {
         return this.wb.getNumberOfSheets();
     }
 
+   
     /**
-     * Get the all sheet
-     */
-    public void getAllSheet() {
-        int sheetNumber = this.getSheetNumber();
-        for (int i = 0; i < sheetNumber; i++) {
-            this.getSheet(i);
-        }
-    }
-
-    /**
-     * Create the  filename.json
+     * Create the fileJsonName.json
      * @throws IOException 
      */
-    protected void createFileJSON() throws IOException  {
+    public void createFileJSON() throws IOException  {
     	fileOutput = new BufferedWriter(new FileWriter(fileJsonName));
     	fileOutput.write(this.JSONData);
     	fileOutput.close();
@@ -258,9 +271,15 @@ public class ExcelToJsonXLSX {
         this.columnIndexInit = this.naturalNumber(columnInit);
     }
 
-    // Convert the integer number in a  natural number
+    /**
+     * Convert the integer number in a natural number
+     * @param nmb
+     * @return int
+     */
     private int naturalNumber(int nmb) {
         return nmb < 0 ? (nmb * -1) : nmb;
     }
+    
+    
 
 }
